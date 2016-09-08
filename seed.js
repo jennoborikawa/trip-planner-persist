@@ -88,13 +88,13 @@ module.exports = {
             Restaurant.findAll()
         ]);
       })
-      .spread(function(day1, day2, restaurants){
-        return Promise.all([
-            Meal.create({ dayId: day1.id, restaurantId: restaurants[0].id }),
-            Meal.create({ dayId: day1.id, restaurantId: restaurants[2].id }),
-            Meal.create({ dayId: day2.id, restaurantId: restaurants[3].id })
-        ])
-      })
+      // .spread(function(day1, day2, restaurants){
+      //   return Promise.all([
+      //       Meal.create({ dayId: day1.id, restaurantId: restaurants[0].id }),
+      //       Meal.create({ dayId: day1.id, restaurantId: restaurants[2].id }),
+      //       Meal.create({ dayId: day2.id, restaurantId: restaurants[3].id })
+      //   ])
+      // })
       .then(function () {
         console.log('Finished inserting meal data');
       });

@@ -110,21 +110,31 @@ Tripplanner.prototype.addDay = function(){
 }
 
 Tripplanner.prototype.removeDay = function(){
+  var that = this;
+  console.log(this.currentIdx+1);
   if(this.days.length === 1)
     return;
-  this.days.splice(this.currentIndex, 1);
-  this.renderDayPicker(0);
+  $.ajax({
+    url: '/days/' + (this.currentIdx+1),
+    method: 'DELETE'
+  })
+  .then(function(day){
+    that.days.splice(that.currentIndex, 1);
+    that.renderDayPicker(0);
+  })
+  .then(null,function(err){ throw err});
 };
 
 Tripplanner.prototype.addItem = function(id, type){
-  //var item = this.getItemByIdAndType(id*1, type);
+  var item = this.getItemByIdAndType(id*1, type);
   // console.log(this.currentIdx); 
   var that = this;
+
   $.ajax({
-    url: '/api/day/' + (this.currentIdx+1) + '/' + type + '/' + id,
+    url: '/days/' + (this.currentIdx+1) + '/' + type + '/' + id,
     method: 'POST'
   })
-  .then(function(item){
+  .then(function(){
     that.days[that.currentIdx][type].push(item);
     that.renderItem(item, type);
   });
@@ -143,7 +153,7 @@ Tripplanner.prototype.removeItem = function(idx, type, elem){
   var day = this.days[this.currentIdx];
   var list = this.days[this.currentIdx][type];
   var item = list[idx];
-  var url = '/days/' + day.id + '/' + type + '/' + item.id;
+  var url = '/days/' + (this.currentIdx+1) + '/' + type + '/' + item.id;
   var that = this;
   $.ajax({
     url: url,
